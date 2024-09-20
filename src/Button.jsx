@@ -1,6 +1,9 @@
-const Button = ({ children, url }) => {
+const Button = ({ children, url, onClick }) => {
   return (
-    <button className="py-sm px-md bg-cyan rounded-full text-white w-1/3 min-w-fit text-center hover:opacity-70">
+    <button
+      onClick={onClick}
+      className="py-sm px-md bg-cyan rounded-full text-white w-1/3 min-w-fit text-center hover:opacity-70"
+    >
       <a href={url}>{children}</a>
     </button>
   )

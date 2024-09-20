@@ -5,7 +5,7 @@ export default function Nav() {
     <nav className="font-bold text-center bg-darkViolet lg:bg-white p-md lg:p-[0px] rounded-lg lg:rounded-none  lg:flex items-center justify-between w-full text-white lg:text-grayishViolet">
       <menu className="lg:flex">
         {[
-          ["Features", "#"],
+          ["Features", "#advanced-statistics"],
           ["Pricing", "#"],
           ["Resources", "#"]
         ].map(([title, url]) => (

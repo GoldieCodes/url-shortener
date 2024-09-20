@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBars } from "@fortawesome/free-solid-svg-icons"
-import { faXmark } from "@fortawesome/free-solid-svg-icons"
+import { faBars, faXmark } from "@fortawesome/free-solid-svg-icons"
 import { useEffect, useState } from "react"
 import logo from "./assets/images/logo.svg"
 import brand from "./assets/images/icon-brand-recognition.svg"
@@ -9,7 +8,8 @@ import customize from "./assets/images/icon-fully-customizable.svg"
 import heroImg from "./assets/images/illustration-working.svg"
 import Button, { Paragraph, Heading2, Heading3, Box } from "./Button"
 import Nav from "./Nav"
-import Form from "./form"
+import Form, { Links } from "./Form"
+import Footer from "./Footer"
 
 function App() {
   const [screenSize, setSize] = useState(window.innerWidth)
@@ -19,6 +19,16 @@ function App() {
     }
   }, [screenSize])
   const [openMenu, setOpenMenu] = useState(false)
+
+  const smoothScroll = id => {
+    const element = document.getElementById(id)
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      })
+    }
+  }
 
   return (
     <>
@@ -67,16 +77,21 @@ function App() {
                 your links are performing
               </Paragraph>
               <div className="mt-md">
-                <Button url="#">Get Started</Button>
+                <Button onClick={() => smoothScroll("link-input")}>
+                  Get Started
+                </Button>
               </div>
             </main>
           </div>
         </section>
-        <section className="relative z-50 w-5/6 lg:w-3/4 mx-auto my-0 max-w-screen-lg p-md md:p-lg rounded-md text-center bg-vDarkBlue bg-cover bg-no-repeat bg-[url('./assets/images/bg-boost-mobile.svg')] lg:bg-[url('./assets/images/bg-boost-desktop.svg')]">
+        <section>
           <Form />
         </section>
-        <section className="py-[9rem] md:py-[12rem] -mt-[4rem] bg-gray bg-opacity-30">
-          <div className="text-center w-5/6 lg:w-3/4 mx-auto my-0 max-w-screen-lg grid justify-items-center">
+        <section
+          id="advanced-statistics"
+          className="bg-gray bg-opacity-30 pb-[3rem] md:pb-[5rem]"
+        >
+          <div className="text-center w-5/6 lg:w-3/4 mx-auto max-w-screen-lg grid justify-items-center">
             <Heading2>Advanced Statistics</Heading2>
             <Paragraph>
               Track how your links are performing across the web with our
@@ -122,7 +137,9 @@ function App() {
           </div>
         </section>
       </main>
-      <footer className="bg-vDarkViolet"></footer>
+      <footer className="py-lg bg-vDarkViolet">
+        <Footer />
+      </footer>
     </>
   )
 }
