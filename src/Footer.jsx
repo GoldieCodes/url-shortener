@@ -2,7 +2,7 @@ import {
   faTwitter,
   faInstagram,
   faPinterest,
-  faFacebook
+  faFacebook,
 } from "@fortawesome/free-brands-svg-icons"
 import logo from "./assets/images/logo.svg"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -23,7 +23,7 @@ export default function Footer() {
           {[
             ["Link Shortening", "#"],
             ["Branded Links", "#"],
-            ["Analytics", "#"]
+            ["Analytics", "#"],
           ].map(([title, url]) => (
             <li
               className="text-[14px] hover:text-cyan text-center lg:text-start lg:pl-[0px] text-grayishViolet px-md py-sm"
@@ -40,7 +40,7 @@ export default function Footer() {
           {[
             ["Blog", "#"],
             ["Developers", "#"],
-            ["Support", "#"]
+            ["Support", "#"],
           ].map(([title, url]) => (
             <li
               className="text-[14px] hover:text-cyan text-center lg:text-start lg:pl-[0px] text-grayishViolet px-md py-sm"
@@ -58,7 +58,7 @@ export default function Footer() {
             ["About", "#"],
             ["Our Team", "#"],
             ["Careers", "#"],
-            ["Contact", "#"]
+            ["Contact", "#"],
           ].map(([title, url]) => (
             <li
               className="text-[14px] hover:text-cyan text-center lg:text-start lg:pl-[0px] text-grayishViolet px-md py-sm"
@@ -74,7 +74,7 @@ export default function Footer() {
           [faFacebook, "https://facebook.com"],
           [faTwitter, "https://twitter.com"],
           [faPinterest, "https://pinterest.com"],
-          [faInstagram, "https://instagram.com"]
+          [faInstagram, "https://instagram.com"],
         ].map(([title, url]) => (
           <li
             className="hover:text-cyan text-gray text-xl px-md lg:px-sm py-sm h-fit"

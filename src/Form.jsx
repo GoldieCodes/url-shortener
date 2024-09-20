@@ -6,26 +6,27 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
 
 const Form = () => {
-  const storedLinks = JSON.parse(localStorage.getItem("links"))
-  const [linkDisplay, setDisplay] = useState(storedLinks)
+  const [linkDisplay, setDisplay] = useState([])
 
   useEffect(() => {
     localStorage.setItem("links", JSON.stringify(linkDisplay))
+    const storedLinks = JSON.parse(localStorage.getItem("links"))
+    if (linkDisplay.length != 0) setDisplay(storedLinks)
   }, [linkDisplay])
 
   const formik = useFormik({
     initialValues: { link: "" },
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       const response = await fetch(
         `https://api.shrtco.de/v2/shorten?url=${values.link}`
       )
       const link = await response.json()
-      setDisplay(prev => [...prev, link.result])
+      setDisplay((prev) => [...prev, link.result])
       formik.resetForm()
     },
     validationSchema: Yup.object({
-      link: Yup.string().required("* Please add a link").url("Invalid link!")
-    })
+      link: Yup.string().required("* Please add a link").url("Invalid link!"),
+    }),
   })
 
   return (
@@ -75,7 +76,7 @@ export default Form
 
 export const Links = ({ links, setLinks }) => {
   const [tab, setTab] = useState("9qr")
-  const tabThrough = id => {
+  const tabThrough = (id) => {
     setTab(id)
   }
 

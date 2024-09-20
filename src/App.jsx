@@ -8,7 +8,7 @@ import customize from "./assets/images/icon-fully-customizable.svg"
 import heroImg from "./assets/images/illustration-working.svg"
 import Button, { Paragraph, Heading2, Heading3, Box } from "./Button"
 import Nav from "./Nav"
-import Form, { Links } from "./Form"
+import Form from "./Form"
 import Footer from "./Footer"
 
 function App() {
@@ -20,12 +20,12 @@ function App() {
   }, [screenSize])
   const [openMenu, setOpenMenu] = useState(false)
 
-  const smoothScroll = id => {
+  const smoothScroll = (id) => {
     const element = document.getElementById(id)
     if (element) {
       element.scrollIntoView({
         behavior: "smooth",
-        block: "center"
+        block: "center",
       })
     }
   }
