@@ -1,27 +1,39 @@
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { Heading3 } from "./Button"
+import { Heading3, Paragraph } from "./Button"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
 
 const Form = () => {
-  const [linkDisplay, setDisplay] = useState([])
+  const [shortLink, setLink] = useState(
+    JSON.parse(localStorage.getItem("storeLinks"))
+  )
+  const API_KEY = "O2zDY6jMv7Hde9RKO24X6dBr8uHaDwQzB0j72xABFNEp5kJtWsHitA0doBS2"
 
   useEffect(() => {
-    localStorage.setItem("links", JSON.stringify(linkDisplay))
-    const storedLinks = JSON.parse(localStorage.getItem("links"))
-    if (linkDisplay.length != 0) setDisplay(storedLinks)
-  }, [linkDisplay])
+    localStorage.setItem("storeLinks", JSON.stringify(shortLink))
+  }, [shortLink])
 
   const formik = useFormik({
     initialValues: { link: "" },
     onSubmit: async (values) => {
-      const response = await fetch(
-        `https://api.shrtco.de/v2/shorten?url=${values.link}`
-      )
-      const link = await response.json()
-      setDisplay((prev) => [...prev, link.result])
+      const response = await fetch("https://api.tinyurl.com/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${API_KEY}`, // Add the API key here
+        },
+        body: JSON.stringify({
+          url: values.link, // The long URL to shorten
+          domain: "tinyurl.com", // Optional, to specify custom domain
+        }),
+      })
+      const data = await response.json()
+      setLink((prev) => [
+        ...prev,
+        { long: data.data.url, short: data.data.tiny_url },
+      ])
       formik.resetForm()
     },
     validationSchema: Yup.object({
@@ -67,7 +79,7 @@ const Form = () => {
         </form>
       </div>
       <section className="-mt-[4rem] py-[5rem] bg-gray bg-opacity-30">
-        <Links links={linkDisplay} setLinks={setDisplay} />
+        <Links links={shortLink} setLinks={setLink} />
       </section>
     </>
   )
@@ -75,14 +87,9 @@ const Form = () => {
 export default Form
 
 export const Links = ({ links, setLinks }) => {
-  const [tab, setTab] = useState("9qr")
-  const tabThrough = (id) => {
-    setTab(id)
-  }
-
   const handleCopying = (link, index) => {
-    let buttonID = document.getElementById(`${link.code}-${index}`)
-    let linkID = document.getElementById(link.code)
+    let buttonID = document.getElementById(`${link}-${index}`)
+    let linkID = document.getElementById(link)
     navigator.clipboard.writeText(linkID.innerText)
     buttonID.innerHTML = "Copied!"
     buttonID.classList.add("bg-darkViolet")
@@ -96,118 +103,38 @@ export const Links = ({ links, setLinks }) => {
 
   return (
     <div className="w-5/6 lg:w-3/4 mx-auto max-w-screen-lg grid gap-md">
-      <header>
-        <Heading3>URL Base</Heading3>
-      </header>
-      <div className="flex flex-col min-[400px]:flex-row gap-sm">
-        <button
-          className={`p-md ${
-            tab === "9qr"
-              ? "bg-darkViolet hover:bg-darkViolet text-white"
-              : "bg-gray"
-          } hover:bg-[#cfcfcfed] `}
-          onClick={() => tabThrough("9qr")}
-        >
-          9qr.de
-        </button>
-        <button
-          className={`p-md ${
-            tab === "shrtco"
-              ? "bg-darkViolet hover:bg-darkViolet text-white"
-              : "bg-gray"
-          } hover:bg-[#cfcfcfed] `}
-          onClick={() => {
-            tabThrough("shrtco")
-          }}
-        >
-          shrtco.de
-        </button>
-        <button
-          className={`p-md ${
-            tab === "shiny"
-              ? "bg-darkViolet hover:bg-darkViolet text-white"
-              : "bg-gray"
-          } hover:bg-[#cfcfcfed] `}
-          onClick={() => tabThrough("shiny")}
-        >
-          shiny.link
-        </button>
-      </div>
+      {links.length > 0 && (
+        <header>
+          <Heading3>Your Urls</Heading3>
+          <Paragraph>
+            We are using the tinyurl api to shorten your link.
+          </Paragraph>
+        </header>
+      )}
+
       <div className="max-w-[80vw]">
-        {tab === "9qr"
-          ? links.map((link, index) => {
-              return (
-                <article
-                  key={link.code}
-                  className="bg-white p-md rounded-md mb-md break-words lg:flex justify-between items-center"
+        {links.map((link, index) => {
+          return (
+            <article
+              key={`${link.short}-${index}`}
+              className="bg-white p-md rounded-md mb-md break-words lg:flex justify-between items-center"
+            >
+              <p className="mb-sm lg:mb-[0px] lg:max-w-[54%]">{link.long}</p>
+              <div className="lg:flex gap-md items-center">
+                <p id={link.short} className="text-cyan">
+                  {link.short}
+                </p>
+                <button
+                  id={`${link.short}-${index}`}
+                  className={`py-sm px-md mt-sm lg:mt-[0px] rounded-md bg-cyan text-white md:w-1/3 min-w-fit text-center hover:opacity-70 active:translate-y-[3px]`}
+                  onClick={() => handleCopying(link.short, index)}
                 >
-                  <p className="mb-sm lg:mb-[0px] lg:max-w-[54%]">
-                    {link.original_link}
-                  </p>
-                  <div className="lg:flex gap-md items-center">
-                    <p id={link.code} className="text-cyan">
-                      {link.full_short_link2}
-                    </p>
-                    <button
-                      id={`${link.code}-${index}`}
-                      className={`py-sm px-md mt-sm lg:mt-[0px] rounded-md bg-cyan text-white md:w-1/3 min-w-fit text-center hover:opacity-70 active:translate-y-[3px]`}
-                      onClick={() => handleCopying(link, index)}
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </article>
-              )
-            })
-          : tab === "shrtco"
-          ? links.map((link, index) => {
-              return (
-                <article
-                  key={link.code}
-                  className="bg-white p-md rounded-md mb-md break-words lg:flex justify-between items-center"
-                >
-                  <p className="mb-sm lg:mb-[0px] lg:max-w-[54%]">
-                    {link.original_link}
-                  </p>
-                  <div className="lg:flex gap-md items-center">
-                    <p id={link.code} className="text-cyan">
-                      {link.full_short_link}
-                    </p>
-                    <button
-                      id={`${link.code}-${index}`}
-                      className={`py-sm px-md rounded-md bg-cyan mt-sm lg:mt-[0px] text-white md:w-1/3 min-w-fit text-center hover:opacity-70 active:translate-y-[3px]`}
-                      onClick={() => handleCopying(link, index)}
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </article>
-              )
-            })
-          : links.map((link, index) => {
-              return (
-                <article
-                  key={link.code}
-                  className="bg-white p-md rounded-md mb-md break-words lg:flex justify-between items-center"
-                >
-                  <p className="mb-sm lg:mb-[0px] lg:max-w-[54%]">
-                    {link.original_link}
-                  </p>
-                  <div className="lg:flex gap-md items-center">
-                    <p id={link.code} className="text-cyan">
-                      {link.full_short_link3}
-                    </p>
-                    <button
-                      id={`${link.code}-${index}`}
-                      className={`py-sm px-md rounded-md mt-sm lg:mt-[0px] bg-cyan text-white md:w-1/3 min-w-fit text-center hover:opacity-70 active:translate-y-[3px]`}
-                      onClick={() => handleCopying(link, index)}
-                    >
-                      Copy
-                    </button>
-                  </div>
-                </article>
-              )
-            })}
+                  Copy
+                </button>
+              </div>
+            </article>
+          )
+        })}
       </div>
 
       {links.length < 2 ? null : (

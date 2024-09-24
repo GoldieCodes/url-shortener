@@ -33,7 +33,7 @@ function App() {
   return (
     <>
       <header className="w-5/6 lg:w-3/4 mx-auto my-0 max-w-screen-lg">
-        <div className="flex items-center justify-between lg:gap-lg px-0 py-md relative">
+        <div className="flex items-center justify-between lg:gap-lg px-0 py-sm relative">
           <img src={logo} alt="logo" className="w-[20vw] max-w-[120px]" />
           {screenSize < 1024 ? (
             <>
@@ -60,7 +60,7 @@ function App() {
       </header>
       <main className="">
         <section className="w-5/6 lg:w-3/4 mx-auto my-0 max-w-screen-lg mb-xl md:mb-[0px]">
-          <div className="md:flex md:items-center md:flex-row-reverse px-0 md:py-xl">
+          <div className="md:flex md:items-center md:flex-row-reverse px-0 md:pb-xl md:pt-sm">
             <aside>
               <img
                 src={heroImg}
