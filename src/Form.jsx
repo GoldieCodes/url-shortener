@@ -12,8 +12,7 @@ const Form = () => {
   const API_KEY = "O2zDY6jMv7Hde9RKO24X6dBr8uHaDwQzB0j72xABFNEp5kJtWsHitA0doBS2"
 
   useEffect(() => {
-    shortLink.length != 0 &&
-      localStorage.setItem("storeLinks", JSON.stringify(shortLink))
+    localStorage.setItem("storeLinks", JSON.stringify(shortLink))
   }, [shortLink])
 
   const formik = useFormik({
