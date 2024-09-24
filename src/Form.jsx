@@ -6,13 +6,14 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
 
 const Form = () => {
-  const [shortLink, setLink] = useState(
-    JSON.parse(localStorage.getItem("storeLinks"))
-  )
+  const [shortLink, setLink] = useState([
+    JSON.parse(localStorage.getItem("storeLinks")),
+  ])
   const API_KEY = "O2zDY6jMv7Hde9RKO24X6dBr8uHaDwQzB0j72xABFNEp5kJtWsHitA0doBS2"
 
   useEffect(() => {
-    localStorage.setItem("storeLinks", JSON.stringify(shortLink))
+    shortLink.length != 0 &&
+      localStorage.setItem("storeLinks", JSON.stringify(shortLink))
   }, [shortLink])
 
   const formik = useFormik({
