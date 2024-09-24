@@ -6,9 +6,9 @@ import { faTrashCan } from "@fortawesome/free-solid-svg-icons"
 import { useState, useEffect } from "react"
 
 const Form = () => {
-  const [shortLink, setLink] = useState([
-    JSON.parse(localStorage.getItem("storeLinks")),
-  ])
+  const [shortLink, setLink] = useState(
+    JSON.parse(localStorage.getItem("storeLinks")) || []
+  )
   const API_KEY = "O2zDY6jMv7Hde9RKO24X6dBr8uHaDwQzB0j72xABFNEp5kJtWsHitA0doBS2"
 
   useEffect(() => {
@@ -113,28 +113,29 @@ export const Links = ({ links, setLinks }) => {
       )}
 
       <div className="max-w-[80vw]">
-        {links.map((link, index) => {
-          return (
-            <article
-              key={`${link.short}-${index}`}
-              className="bg-white p-md rounded-md mb-md break-words lg:flex justify-between items-center"
-            >
-              <p className="mb-sm lg:mb-[0px] lg:max-w-[54%]">{link.long}</p>
-              <div className="lg:flex gap-md items-center">
-                <p id={link.short} className="text-cyan">
-                  {link.short}
-                </p>
-                <button
-                  id={`${link.short}-${index}`}
-                  className={`py-sm px-md mt-sm lg:mt-[0px] rounded-md bg-cyan text-white md:w-1/3 min-w-fit text-center hover:opacity-70 active:translate-y-[3px]`}
-                  onClick={() => handleCopying(link.short, index)}
-                >
-                  Copy
-                </button>
-              </div>
-            </article>
-          )
-        })}
+        {links.length > 0 &&
+          links.map((link, index) => {
+            return (
+              <article
+                key={`${link.short}-${index}`}
+                className="bg-white p-md rounded-md mb-md break-words lg:flex justify-between items-center"
+              >
+                <p className="mb-sm lg:mb-[0px] lg:max-w-[54%]">{link.long}</p>
+                <div className="lg:flex gap-md items-center">
+                  <p id={link.short} className="text-cyan">
+                    {link.short}
+                  </p>
+                  <button
+                    id={`${link.short}-${index}`}
+                    className={`py-sm px-md mt-sm lg:mt-[0px] rounded-md bg-cyan text-white md:w-1/3 min-w-fit text-center hover:opacity-70 active:translate-y-[3px]`}
+                    onClick={() => handleCopying(link.short, index)}
+                  >
+                    Copy
+                  </button>
+                </div>
+              </article>
+            )
+          })}
       </div>
 
       {links.length < 2 ? null : (
