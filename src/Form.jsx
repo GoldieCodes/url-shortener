@@ -138,9 +138,11 @@ export const Links = ({ links, setLinks }) => {
           })}
       </div>
 
-      {links.length < 2 ? null : (
+      {links.length > 0 && (
         <div className="mx-auto flex gap-sm items-center justify-center opacity-50 text-[#b82f2f] cursor-pointer hover:opacity-100">
-          <button onClick={() => setLinks([])}>Clear Links</button>
+          <button onClick={() => setLinks([])}>
+            Clear {links.length === 1 ? " Link" : " Links"}
+          </button>
           <FontAwesomeIcon icon={faTrashCan} />
         </div>
       )}
